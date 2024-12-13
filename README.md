@@ -36,9 +36,11 @@ Using the NVIDIA A100 40GB GPU, we were able to train for 1 epoch using the enti
 # Model evaluation
 
 We took the LLaMA 3 8B base model as our baseline. We used the groq inference service to submit questions to the original model and collect responses, and we submitted questions to the fine-tuned model and collected responses.
-One important note about the inference settings is that we restricted the fine tuned model responses to the maximum of 150 new tokens to speed up the processing. For this reason some responses are truncated in the middle of a sentence.
+One important note about the inference settings is that we restricted the fine tuned model responses to the maximum of 150 new tokens to speed up the processing. For this reason some responses are truncated in the middle of a sentence.  
 
-# Model evaluation
+By the 1075th sample, we had reached the maximum quota of tokens per day in Groq. So the first 1075 out of 2996 samples were evaluated.  
+
+# Results
 
 We evaluated the model using a set of metrics, starting from the simpler ones based on ngrams BLEU and ROUGE, then proceeding to a Sentence Transformer (SBERT) similarity score evaluation.
 The fine-tuned model outperformed the base model on all metrics:
@@ -277,3 +279,8 @@ Looking closely at the model output, we get the impression that the optimisation
 Considering the cost and complexity of doing a full alignment of the model parameters using DPO, RLHF or any other method, it might make sense to try the RAG method, taking special care in the retrieval part not to mix different topics in context.
 
 In fact, an interesting approach could be to start with an intent classification, where the question is first classified into a specific topic, and then surface the relevant content about that topic and let the model process the context and answer the question based on the right piece of information.
+
+  
+# Other considerations
+
+This is not production code, of course. So I won't go into detail about what's missing in that aspect. The idea was not to build an structured pipeline, but to test a hypothesis.
